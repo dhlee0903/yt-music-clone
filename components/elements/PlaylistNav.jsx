@@ -4,7 +4,9 @@ import { IoMdPlayCircle } from "react-icons/io";
 
 const PlaylistNav = ({ playlist }) => {
 
-  const onClickPlay = () => {};
+  const onClickPlay = () => {
+    // TODO play music
+  };
 
   const { id, owner, playlistName, songList } = playlist;
   return (
