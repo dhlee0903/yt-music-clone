@@ -1,6 +1,8 @@
+"use client";
+
 import UserIcon from "@/components/UserIcon";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PagePadding from "@/components/PagePadding";
 import { FaChromecast } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
@@ -28,7 +30,7 @@ const HeaderDrawer = ({ children }) => {
           <div className="px-3">
             <Logo />
           </div>
-          <Navigator/>
+          <Navigator />
         </div>
       </DrawerContent>
     </Drawer>
@@ -36,8 +38,24 @@ const HeaderDrawer = ({ children }) => {
 };
 
 const Header = ({ children }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const headRef = useRef();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollValue = headRef?.current?.scrollTop;
+      console.log(">scrollValue", scrollValue);
+      setIsScrolled(scrollValue !== 0);
+    };
+
+    headRef?.current?.addEventListener("scroll", handleScroll)
+    return () => {
+      headRef?.current?.removeEventListener("scroll", handleScroll)
+    };
+  }, []);
+
   return (
-    <header className=" relative overflow-y-auto w-full h-full">
+    <header ref={headRef} className=" relative overflow-y-auto w-full h-full">
       {/* bgSection */}
       <section className=" absolute top-0 w-full">
         <div className=" relative h-[400px] w-full">
@@ -52,7 +70,7 @@ const Header = ({ children }) => {
         <div className=" absolute h-[400px] top-0 bg-gradient-to-t from-black w-full"></div>
       </section>
       {/* searchSection */}
-      <section className=" sticky">
+      <section className=" sticky top-0 left-0 z-10">
         <PagePadding>
           <div className="h-[64px] flex flex-row justify-between items-center">
             <article
